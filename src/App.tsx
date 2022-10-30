@@ -1,10 +1,12 @@
 import React from 'react';
-import { Header } from './components';
+import { Header, ToDoList } from './components';
 
 export default function App() {
   return (
     <>
       <Header />
+
+      <ToDoList />
     </>
   );
 }
