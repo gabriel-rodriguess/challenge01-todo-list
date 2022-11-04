@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainContainer, NewTaskForm, NewTaskInput } from './ToDoList.styles';
+import { InfoText, MainContainer, NewTaskButton, NewTaskForm, NewTaskInput, TaskHeader } from './ToDoList.styles';
 
 export function ToDoList() {
 
@@ -9,12 +9,12 @@ export function ToDoList() {
         <NewTaskInput
           placeholder='Adicione uma nova tarefa'
         />
-        <button>Criar</button>
+        <NewTaskButton>Criar</NewTaskButton>
       </NewTaskForm>
-      <header>
-        <b>Tarefas Criadas 5</b>
-        <b>Concluídas 2 de 5</b>
-      </header>
+      <TaskHeader>
+        <InfoText>Tarefas Criadas <b>5</b></InfoText>
+        <InfoText>Concluídas <b>2 de 5</b></InfoText>
+      </TaskHeader>
       <section>
         <article>
           <input type='checkbox'/>
