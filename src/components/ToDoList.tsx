@@ -1,28 +1,81 @@
-import React from 'react';
-import { InfoText, MainContainer, NewTaskButton, NewTaskForm, NewTaskInput, TaskHeader } from './ToDoList.styles';
+import React, { FormEvent, useState } from 'react';
+import { PlusCircle } from "phosphor-react";
+import { Task } from './Task';
+import {
+  HeaderSide,
+  InfoCounter,
+  InfoText,
+  MainContainer,
+  NewTaskButton,
+  NewTaskForm,
+  NewTaskInput,
+  TaskHeader,
+  ToDoListContainer
+} from './ToDoList.styles';
+
+interface TaskAttributes {
+  id: number,
+  content: string,
+  isCompleted: boolean,
+}
 
 export function ToDoList() {
+  const [newTaskContent, setNewTaskContent] = useState("");
+  const [taskList, setTaskList] = useState<TaskAttributes[]>([]);
+
+  function handleTaskSelected(idTaskSelected: number) {
+    setTaskList(state => state.map(task => task.id === idTaskSelected ? { ...task, isCompleted: !task.isCompleted} : task));
+  }
+
+  function handleCreateTask(event: FormEvent) {
+    event.preventDefault();
+    const newTask = {
+      id: 1231,
+      content: newTaskContent,
+      isCompleted: false,
+    };
+    setTaskList(state => [...state, newTask]);
+  }
+
+  function handleDeleteTask() {
+
+  }
 
   return (
     <MainContainer>
-      <NewTaskForm>
+      <NewTaskForm
+        onSubmit={handleCreateTask}
+      >
         <NewTaskInput
           placeholder='Adicione uma nova tarefa'
+          onChange={event => setNewTaskContent(event.target.value)}
         />
-        <NewTaskButton>Criar</NewTaskButton>
+        <NewTaskButton>Criar <PlusCircle size={20} /></NewTaskButton>
       </NewTaskForm>
-      <TaskHeader>
-        <InfoText>Tarefas Criadas <b>5</b></InfoText>
-        <InfoText>Concluídas <b>2 de 5</b></InfoText>
-      </TaskHeader>
-      <section>
-        <article>
-          <input type='checkbox'/>
-          Any text!!
-          <button>Delete</button>
-        </article>
 
-      </section>
+      <TaskHeader>
+        <HeaderSide>
+          <InfoText>Tarefas Criadas</InfoText><InfoCounter>5</InfoCounter>
+        </HeaderSide>
+
+        <HeaderSide>
+          <InfoText secondaryColor>Concluídas</InfoText><InfoCounter>2 de 5</InfoCounter>
+        </HeaderSide>
+      </TaskHeader>
+
+      <ToDoListContainer> 
+
+        {taskList.map(task => {
+          const { id, content, isCompleted} = task;
+          return <Task 
+            idTask={id}
+            content={content}
+            isCompleted={isCompleted}
+            onCheckBoxClick={handleTaskSelected}
+          />
+        })}
+
+      </ToDoListContainer>
     </MainContainer>
   );
 }

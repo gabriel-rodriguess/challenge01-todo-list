@@ -7,7 +7,7 @@ export const MainContainer = styled.main`
   justify-content: center;
 
   width: 46rem;
-  margin: auto;
+  margin: -1.687rem auto;
 `;
 
 export const NewTaskForm = styled.form`
@@ -15,6 +15,8 @@ export const NewTaskForm = styled.form`
   gap: 8px;
   height: 3.375rem;
   width: 100%;
+
+  margin-bottom: 4rem; 
 `;
 
 export const NewTaskInput = styled.input`
@@ -25,7 +27,6 @@ export const NewTaskInput = styled.input`
   gap: 8px;
 
   border-radius: 8px;
-  width: 100%;
   background: ${props => props.theme.gray500};
   border: 1px solid ${props => props.theme.gray700};
 
@@ -40,17 +41,14 @@ export const NewTaskButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  gap: 8px;
+  gap: 4px;
 
   width: 5.625rem;
   height: 3.25rem;
 
   background: ${props => props.theme.blueDark};
   border-radius: 8px;
-
-  flex: none;
-  order: 1;
-  flex-grow: 0;
+  border: 0px solid;
 
   color: ${props => props.theme.gray100};
 `;
@@ -61,8 +59,46 @@ export const TaskHeader = styled.header`
 
   width: 100%;
   height: 1.1875rem;
+
+  margin-bottom: 1.5rem;
 `;
 
-export const InfoText = styled.b`
-  color: ${props => props.theme.blue};
+interface InfoTextProps {
+  secondaryColor?: boolean
+}
+
+export const InfoText = styled.div<InfoTextProps>`
+  color: ${props => props.secondaryColor ? props.theme.purple : props.theme.blue};
+  display: flex;
+  font-weight: 700;
+`;
+
+export const InfoCounter = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.1875rem;
+  padding: 2px 8px;
+  color: ${props => props.theme.gray200};
+
+  font-size: 0.875rem;
+  font-weight: 700;  
+
+
+  background:  ${props => props.theme.gray400}; 
+  border-radius: 999px;
+`;
+
+export const HeaderSide = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const ToDoListContainer = styled.section`
+  width: 100%;
+  
+  > * {
+    margin-bottom: 12px;
+  }
 `;
