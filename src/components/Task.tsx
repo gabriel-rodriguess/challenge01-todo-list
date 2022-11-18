@@ -4,11 +4,11 @@ import check from '../assets/check.svg';
 import checkSelected from '../assets/check_selected.svg';
 
 interface TaskProps{
-  idTask: number,
+  idTask: string,
   content: string,
   isCompleted: boolean,
-  onCheckBoxClick: (idTaskSelected: number) => {},
-  onTaskDeleted?: () => {},
+  onCheckBoxClick: (idTaskSelected: string) => void,
+  onDelete: (idTaskSelected: string) => void,
 }
 
 export function Task({
@@ -16,8 +16,11 @@ export function Task({
   content,
   isCompleted,
   onCheckBoxClick,
-  onTaskDeleted
+  onDelete
 }: TaskProps) {
+  function deleteTask() {
+    onDelete(idTask);
+  }
   return (
     <TaskContainer>
       <CheckBox onClick={() => onCheckBoxClick(idTask)} >
@@ -26,7 +29,7 @@ export function Task({
       <TaskText>
         {content}
       </TaskText>
-      <DeleteButton onClick={onTaskDeleted} ><Trash size={20} /></DeleteButton>
+      <DeleteButton onClick={deleteTask} ><Trash size={20} /></DeleteButton>
     </TaskContainer>
   );
 }

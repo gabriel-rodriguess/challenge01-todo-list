@@ -13,8 +13,9 @@ import {
   ToDoListContainer
 } from './ToDoList.styles';
 
+import { v4 as uuid } from 'uuid';
 interface TaskAttributes {
-  id: number,
+  id: string,
   content: string,
   isCompleted: boolean,
 }
@@ -22,23 +23,29 @@ interface TaskAttributes {
 export function ToDoList() {
   const [newTaskContent, setNewTaskContent] = useState("");
   const [taskList, setTaskList] = useState<TaskAttributes[]>([]);
+  const [completedTasks, setCompletedTasks] = useState(0);
 
-  function handleTaskSelected(idTaskSelected: number) {
+  function handleTaskSelected(idTaskSelected: string) {
     setTaskList(state => state.map(task => task.id === idTaskSelected ? { ...task, isCompleted: !task.isCompleted} : task));
+    const sumCompletedTasks = taskList.reduce((cont, taskCurr) => {
+      const contCurr = taskCurr.isCompleted ? 1 : 0;
+      return cont + contCurr;
+    }, 0);
+    setCompletedTasks(sumCompletedTasks);
   }
 
   function handleCreateTask(event: FormEvent) {
     event.preventDefault();
     const newTask = {
-      id: 1231,
+      id: uuid(),
       content: newTaskContent,
       isCompleted: false,
     };
     setTaskList(state => [...state, newTask]);
   }
 
-  function handleDeleteTask() {
-
+  function handleDeleteTask(idTaskSelected: string) {
+    setTaskList(state => state.filter(task => task.id !== idTaskSelected ));
   }
 
   return (
@@ -55,11 +62,11 @@ export function ToDoList() {
 
       <TaskHeader>
         <HeaderSide>
-          <InfoText>Tarefas Criadas</InfoText><InfoCounter>5</InfoCounter>
+          <InfoText>Tarefas Criadas</InfoText><InfoCounter>{taskList.length}</InfoCounter>
         </HeaderSide>
 
         <HeaderSide>
-          <InfoText secondaryColor>Concluídas</InfoText><InfoCounter>2 de 5</InfoCounter>
+          <InfoText secondaryColor>Concluídas</InfoText><InfoCounter>{`${completedTasks} de ${taskList.length}`}</InfoCounter>
         </HeaderSide>
       </TaskHeader>
 
@@ -72,6 +79,7 @@ export function ToDoList() {
             content={content}
             isCompleted={isCompleted}
             onCheckBoxClick={handleTaskSelected}
+            onDelete={handleDeleteTask}
           />
         })}
 
