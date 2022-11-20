@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, InvalidEvent } from 'react';
 import { PlusCircle } from "phosphor-react";
 import { Task } from './Task';
 import {
@@ -14,7 +14,7 @@ import {
 } from './ToDoList.styles';
 
 import { v4 as uuid } from 'uuid';
-interface TaskAttributes {
+export interface TaskAttributes {
   id: string,
   content: string,
   isCompleted: boolean,
@@ -26,8 +26,10 @@ export function ToDoList() {
   const [completedTasks, setCompletedTasks] = useState(0);
 
   function handleTaskSelected(idTaskSelected: string) {
-    setTaskList(state => state.map(task => task.id === idTaskSelected ? { ...task, isCompleted: !task.isCompleted} : task));
-    const sumCompletedTasks = taskList.reduce((cont, taskCurr) => {
+    const newTaskList = taskList.map(task => task.id === idTaskSelected ? { ...task, isCompleted: !task.isCompleted} : task);
+    setTaskList(newTaskList);
+    
+    const sumCompletedTasks = newTaskList.reduce((cont, taskCurr) => {
       const contCurr = taskCurr.isCompleted ? 1 : 0;
       return cont + contCurr;
     }, 0);
@@ -42,10 +44,22 @@ export function ToDoList() {
       isCompleted: false,
     };
     setTaskList(state => [...state, newTask]);
+    setNewTaskContent('');
   }
 
   function handleDeleteTask(idTaskSelected: string) {
-    setTaskList(state => state.filter(task => task.id !== idTaskSelected ));
+    const newTaskList = taskList.filter(task => task.id !== idTaskSelected);
+    setTaskList(newTaskList);
+    
+    const sumCompletedTasks = newTaskList.reduce((cont, taskCurr) => {
+      const contCurr = taskCurr.isCompleted ? 1 : 0;
+      return cont + contCurr;
+    }, 0);
+    setCompletedTasks(sumCompletedTasks);
+  }
+
+  function handleNewTaskInvalid (event: InvalidEvent<HTMLInputElement>) {
+    event.target.setCustomValidity('Este campo é obrigatório!');
   }
 
   return (
@@ -54,8 +68,14 @@ export function ToDoList() {
         onSubmit={handleCreateTask}
       >
         <NewTaskInput
+          value={newTaskContent}
           placeholder='Adicione uma nova tarefa'
-          onChange={event => setNewTaskContent(event.target.value)}
+          onChange={event => {
+            event.target.setCustomValidity('');
+            setNewTaskContent(event.target.value);
+          }}
+          onInvalid={handleNewTaskInvalid}
+          required
         />
         <NewTaskButton>Criar <PlusCircle size={20} /></NewTaskButton>
       </NewTaskForm>
@@ -73,11 +93,10 @@ export function ToDoList() {
       <ToDoListContainer> 
 
         {taskList.map(task => {
-          const { id, content, isCompleted} = task;
+          const { id } = task;
           return <Task 
-            idTask={id}
-            content={content}
-            isCompleted={isCompleted}
+            key={id}
+            task={task}
             onCheckBoxClick={handleTaskSelected}
             onDelete={handleDeleteTask}
           />

@@ -34,12 +34,18 @@ export const CheckBox = styled.button`
   }
 `;
 
-export const TaskText = styled.div`
+interface TaskText {
+  isCompleted: boolean
+}
+
+export const TaskText = styled.div<TaskText>`
   font-style: normal;
   font-weight: 400;
   font-size: 0.875rem;
 
-  color: ${props => props.theme.gray100};
+  color: ${props => props.isCompleted ? props.theme.gray300 : props.theme.gray100};
+
+  text-decoration: ${props => props.isCompleted ? 'line-through' : 'none'};
 
   width: 100%;
 `;

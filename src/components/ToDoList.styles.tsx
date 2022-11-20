@@ -30,6 +30,8 @@ export const NewTaskInput = styled.input`
   background: ${props => props.theme.gray500};
   border: 1px solid ${props => props.theme.gray700};
 
+  color: ${props => props.theme.gray100};
+
   flex: none;
   order: 0;
   flex-grow: 1;
@@ -51,6 +53,10 @@ export const NewTaskButton = styled.button`
   border: 0px solid;
 
   color: ${props => props.theme.gray100};
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export const TaskHeader = styled.header`
